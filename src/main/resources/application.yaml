@@ -1,0 +1,49 @@
+##spring.security.oauth2.client.client-id=c73804e52f74420a98c80123fc9296d5
+##spring.security.oauth2.client.user-authorization-uri=https://accounts.spotify.com/authorize
+##spring.security.oauth2.client.client-secret=4d66133d1cd5473ca91bf988d747ea1f
+##spring.security.oauth2.client.access-token-uri=https://accounts.spotify.com/api/token
+##spring.security.oauth2.resource.user-info-uri=https://api.spotify.com/v1/me
+##spring.security.oauth2.client.scope=user-read-private, user-read-email
+##
+##spring:
+##  security:
+##    oauth2:
+##      client:
+##
+#
+#spring:
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          spotify:
+#            client-id: c73804e52f74420a98c80123fc9296d5
+#            client-secret: 4d66133d1cd5473ca91bf988d747ea1f
+#            redirect-uri: http://localhost:8080
+#            scope:
+#              - user-read-private
+#              - user-read-email
+#        provider:
+#          spotify:
+#            authorization-uri: https://accounts.spotify.com/authorize
+#            token-uri: https://accounts.spotify.com/api/token
+#            user-info-uri: https://api.spotify.com/v1/me
+#            user-info-authentication-method: header
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          spotify:
+            client-id: c73804e52f74420a98c80123fc9296d5
+            client-secret: 4d66133d1cd5473ca91bf988d747ea1f
+            redirect-uri: http://localhost:8080
+            provider: spotify
+            authorization-grant-type: authorization_code
+        provider:
+          spotify:
+            authorization-uri: https://accounts.spotify.com/authorize
+            token-uri: https://accounts.spotify.com/api/token
+            user-info-uri: https://api.spotify.com/v1/me
+            user-name-attribute: id
