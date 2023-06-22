@@ -1,5 +1,8 @@
 package com.spotifytracker.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.*;
@@ -25,7 +28,7 @@ public class SpotifyAccessTokenProvider {
     @Value("${spring.security.oauth2.client.provider.spotify.token-uri}")
     private String tokenUri;
 
-    public String exchangeAuthorizationCodeForAccessToken(String authorizationCode) {
+    public String exchangeAuthorizationCodeForAccessToken(String authorizationCode) throws JsonProcessingException {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -41,42 +44,14 @@ public class SpotifyAccessTokenProvider {
 
         RestTemplate restTemplate = new RestTemplate();
 
-        // Send the POST request to exchange the authorization code for an access token
-//        ResponseEntity<String> response = restTemplate.exchange(
-//                tokenUri,
-//                HttpMethod.POST,
-//                requestEntity,
-//                String.class
-//        );
         ResponseEntity<String> responseEntity = restTemplate.exchange(tokenUri, HttpMethod.POST, requestEntity, String.class);
+        // Tworzenie obiektu ObjectMapper
+        ObjectMapper objectMapper = new ObjectMapper();
 
-//        System.out.println(restTemplate.exchange(
-//                tokenUri,
-//                HttpMethod.POST,
-//                requestEntity,
-//                SpotifyAccessTokenResponse.class
-//        ));
-//        if (responseEntity != null) {
-//            System.out.println("FOUND");
-            return responseEntity.getBody();
-//        } else {
-//            System.out.println("NOT FOUND");
-//            throw new RuntimeException("Failed to obtain access token from Spotify.");
-//        }
-    }
+// Przetworzenie odpowiedzi na obiekt JsonNode
+        JsonNode responseJson = objectMapper.readTree(responseEntity.getBody());
 
-    private static class SpotifyAccessTokenResponse {
-        private String accessToken;
-        // Other fields such as token type, expires in, etc.
-
-        public String getAccessToken() {
-            return accessToken;
+// Pobranie wartości access_token
+        return responseJson.get("access_token").asText();
         }
-
-        public void setAccessToken(String accessToken) {
-            this.accessToken = accessToken;
-        }
-
-        // Getters and setters for other fields
-    }
 }

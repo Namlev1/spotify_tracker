@@ -1,5 +1,6 @@
 package com.spotifytracker.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.spotifytracker.service.SpotifyAccessTokenProvider;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +20,7 @@ public class HomeController {
     }
 
     @GetMapping("/callback")
-    public String callback(HttpServletRequest request) {
+    public String callback(HttpServletRequest request) throws JsonProcessingException {
         String authorizationCode = request.getParameter("code");
 //        System.out.println(authorizationCode);
         return tokenExchange.exchangeAuthorizationCodeForAccessToken(authorizationCode);
