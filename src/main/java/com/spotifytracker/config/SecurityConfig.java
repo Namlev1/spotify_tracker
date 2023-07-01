@@ -23,13 +23,8 @@ public class SecurityConfig {
                 })
                 .oauth2Login()
                 .and()
-                .csrf()
-                .ignoringRequestMatchers(toH2Console())
-                .and()
-                .headers()
-                .frameOptions()
-                .disable()
-                .and()
+                .csrf(auth -> auth.ignoringRequestMatchers(toH2Console()))
+                .headers(head -> head.frameOptions().disable())
                 .build();
     }
 }
