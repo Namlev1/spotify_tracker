@@ -1,4 +1,13 @@
 spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
   security:
     oauth2:
       client:
@@ -6,12 +15,21 @@ spring:
           spotify:
             client-id: c73804e52f74420a98c80123fc9296d5
             client-secret: d252fb74138f44499419e6442822a53d
-            redirect-uri: http://localhost:8080/callback
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             provider: spotify
             authorization-grant-type: authorization_code
         provider:
           spotify:
             authorization-uri: https://accounts.spotify.com/authorize
             token-uri: https://accounts.spotify.com/api/token
-            user-info-uri: https://api.spotify.com/v1/me
             user-name-attribute: id
+            user-info-uri: https://api.spotify.com/v1/me
+#            spring.security.oauth2.client.registration.oauth-provider.client-id=c73804e52f74420a98c80123fc9296d5
+#            spring.security.oauth2.client.registration.oauth-provider.client-secret=d252fb74138f44499419e6442822a53d
+#            spring.security.oauth2.client.registration.oauth-provider.redirect-uri={baseUrl}/login/oauth2/code/{registrationId}
+#            spring.security.oauth2.client.registration.oauth-provider.provider=oauth-provider
+#            spring.security.oauth2.client.registration.oauth-provider.authorization-grant-type=authorization_code
+#            spring.security.oauth2.client.provider.oauth-provider.authorization-uri=https://accounts.spotify.com/authorize
+#            spring.security.oauth2.client.provider.oauth-provider.token-uri=https://accounts.spotify.com/api/token
+#            spring.security.oauth2.client.provider.oauth-provider.user-name-attribute=id
+#            spring.security.oauth2.client.provider.oauth-provider.user-info-uri=https://api.spotify.com/v1/me
