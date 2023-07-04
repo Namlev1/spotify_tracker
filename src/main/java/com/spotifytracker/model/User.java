@@ -22,12 +22,12 @@ public class User implements UserDetails, OAuth2User {
     private String displayName;
     private String href;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JoinColumn(name = "id")
     private List<Image> images;
     private String type;
     private String uri;
     private int followers;
 
+    // TODO better implementation
     @Override
     public <A> A getAttribute(String name) {
         return OAuth2User.super.getAttribute(name);
