@@ -60,8 +60,7 @@ public class SecurityConfig {
             String id = oauth2User.getName();
             Map<String, Object> attributes = oauth2User.getAttributes();
             Optional<User> optional = repoService.findUserById(id);
-            User user = null;
-            user = optional.orElseGet(() -> repoService.registerUser(attributes));
+            User user = optional.orElseGet(() -> repoService.registerUser(attributes));
 
             return user;
         };

@@ -11,7 +11,7 @@ import java.util.*;
 
 @Service
 public class RepositoryService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
     private final ImageRepository imageRepository;
 
     @Autowired
