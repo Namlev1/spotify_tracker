@@ -5,30 +5,38 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @Entity(name = "_user")
 @Data
 @NoArgsConstructor
-public class User implements UserDetails {
+public class User implements UserDetails, OAuth2User {
 
     @Id
     private String id;
     private String displayName;
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "user_uris", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "uri")
-    private List<URI> externalUrls;
-    private URI href;
-    @OneToMany(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "user_images")
+    private String href;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumn(name = "id")
     private List<Image> images;
     private String type;
-    private URI uri;
+    private String uri;
     private int followers;
+
+    @Override
+    public <A> A getAttribute(String name) {
+        return OAuth2User.super.getAttribute(name);
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return null;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -63,5 +71,10 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return null;
     }
 }
