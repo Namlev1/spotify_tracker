@@ -1,15 +1,14 @@
 package com.spotifytracker.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.net.URI;
 import java.util.Collection;
+import java.util.List;
 
 @Entity(name = "_user")
 @Data
@@ -17,9 +16,19 @@ import java.util.Collection;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String displayName;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "user_uris", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "uri")
+    private List<URI> externalUrls;
+    private URI href;
+    @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "user_images")
+    private List<Image> images;
+    private String type;
+    private URI uri;
+    private int followers;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

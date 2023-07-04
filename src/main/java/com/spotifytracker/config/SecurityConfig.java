@@ -33,44 +33,44 @@ public class SecurityConfig {
                     auth.anyRequest().authenticated();
                 })
                 .oauth2Login(oauth2 -> {
-                    oauth2
-                            .userInfoEndpoint()
-                            .userService(customOAuth2UserService());
+//                    oauth2
+//                            .userInfoEndpoint()
+//                            .userService(customOAuth2UserService());
                 })
                 .csrf(csrf -> csrf.ignoringRequestMatchers(toH2Console()))
                 .headers(head -> head.frameOptions().disable())
                 .build();
     }
 
-    @Bean
-    public OAuth2UserService<OAuth2UserRequest, OAuth2User> customOAuth2UserService() {
-        return userRequest -> {
-            DefaultOAuth2UserService defaultOAuth2UserService = new DefaultOAuth2UserService();
-            OAuth2User oauth2User = defaultOAuth2UserService.loadUser(userRequest);// Obtain the OAuth2User from userRequest
-
-                    // Extract necessary user details
-                    String username = oauth2User.getName();// Extract the username from the OAuth2User
-            String displayName = (String) oauth2User.getAttributes().get("display_name");// Extract the display name from the OAuth2User
-
-                    // Check if the user exists in your database
-                    User user = userRepository.findByDisplayName(displayName);
-            if (user != null) {
-                // User exists, update any necessary information
-                user.setDisplayName(displayName);
-                // Update other user details if needed
-                userRepository.save(user);
-            } else {
-                // User doesn't exist, create a new user
-                user = new User();
-                user.setDisplayName(displayName);
-                // Set other user details if needed
-                userRepository.save(user);
-            }
-
-            // Return the OAuth2User instance
-            return oauth2User;
-        };
-    }
+//    @Bean
+//    public OAuth2UserService<OAuth2UserRequest, OAuth2User> customOAuth2UserService() {
+//        return userRequest -> {
+//            DefaultOAuth2UserService defaultOAuth2UserService = new DefaultOAuth2UserService();
+//            OAuth2User oauth2User = defaultOAuth2UserService.loadUser(userRequest);// Obtain the OAuth2User from userRequest
+//
+//                    // Extract necessary user details
+//            String username = oauth2User.getName();// Extract the username from the OAuth2User
+//            String displayName = (String) oauth2User.getAttributes().get("display_name");// Extract the display name from the OAuth2User
+//
+//                    // Check if the user exists in your database
+//                    User user = userRepository.findByDisplayName(displayName);
+//            if (user != null) {
+//                // User exists, update any necessary information
+//                user.setDisplayName(displayName);
+//                // Update other user details if needed
+//                userRepository.save(user);
+//            } else {
+//                // User doesn't exist, create a new user
+//                user = new User();
+//                user.setDisplayName(displayName);
+//                // Set other user details if needed
+//                userRepository.save(user);
+//            }
+//
+//            // Return the OAuth2User instance
+//            return oauth2User;
+//        };
+//    }
 
 
     @Bean
