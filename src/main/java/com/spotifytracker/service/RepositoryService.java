@@ -24,13 +24,6 @@ public class RepositoryService {
         User user = new User();
         user.setId((String) attributes.get("id"));
         user.setDisplayName((String) attributes.get("display_name"));
-        user.setType((String) attributes.get("type"));
-        user.setHref((String) attributes.get("href"));
-        user.setUri((String) attributes.get("uri"));
-
-        // Extract followers
-        Map<String, Object> followers = (Map<String, Object>) attributes.get("followers");
-        user.setFollowers((Integer) followers.get("total"));
 
         // Parse images
         List<Image> images = parseImages(attributes);

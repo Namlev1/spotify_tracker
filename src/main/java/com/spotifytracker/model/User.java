@@ -22,12 +22,8 @@ public class User implements UserDetails, OAuth2User {
     @Id
     private String id;
     private String displayName;
-    private String href;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
-    private String type;
-    private String uri;
-    private int followers;
 
     // TODO better implementation
     @Override
