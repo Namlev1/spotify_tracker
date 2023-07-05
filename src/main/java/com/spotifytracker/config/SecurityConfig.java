@@ -1,15 +1,12 @@
 package com.spotifytracker.config;
 
 import com.spotifytracker.model.User;
-import com.spotifytracker.repository.UserRepository;
 import com.spotifytracker.service.RepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -60,21 +57,7 @@ public class SecurityConfig {
             String id = oauth2User.getName();
             Map<String, Object> attributes = oauth2User.getAttributes();
             Optional<User> optional = repoService.findUserById(id);
-            User user = optional.orElseGet(() -> repoService.registerUser(attributes));
-
-            return user;
-        };
-    }
-
-
-    // TODO check if necessary
-    @Bean
-    public UserDetailsService userDetailsService(UserRepository repository) {
-        return username -> {
-            User user = repository.findByDisplayName(username);
-            if (user != null)
-                return user;
-            throw new UsernameNotFoundException("nie ma");
+            return optional.orElseGet(() -> repoService.registerUser(attributes));
         };
     }
 }
