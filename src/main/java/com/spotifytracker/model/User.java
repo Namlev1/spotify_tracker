@@ -1,9 +1,6 @@
 package com.spotifytracker.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,6 +21,8 @@ public class User implements UserDetails, OAuth2User {
     private String displayName;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
+    @ManyToMany()
+    private List<Artist> artists;
 
     // TODO better implementation
     @Override
