@@ -21,7 +21,7 @@ public class User implements UserDetails, OAuth2User {
     private String displayName;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
-    @ManyToMany()
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Artist> artists;
 
     // TODO better implementation
