@@ -41,4 +41,9 @@ public class ApiService {
         repositoryService.saveUser(user);
         return artists;
     }
+
+    public List<Artist> getAlbums(String id) {
+        //TODO return actual albums
+        return repositoryService.findArtistsByUserId(id);
+    }
 }

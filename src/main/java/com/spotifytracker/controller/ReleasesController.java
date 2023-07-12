@@ -23,9 +23,16 @@ public class ReleasesController {
         this.apiService = apiService;
     }
 
-    @GetMapping
-    List<Artist> useOauthWithAuthCode(Authentication authentication) throws IOException {
+    @GetMapping("/artists")
+    List<Artist> getArtists(Authentication authentication) throws IOException {
         User user = (User) authentication.getPrincipal();
         return apiService.getFollowedArtists(user);
+    }
+
+    @GetMapping("/albums")
+    List<Artist> getAlbums(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        String userId = user.getId();
+        return apiService.getAlbums(userId);
     }
 }

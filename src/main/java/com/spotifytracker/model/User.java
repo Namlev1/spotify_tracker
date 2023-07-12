@@ -1,5 +1,6 @@
 package com.spotifytracker.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,8 @@ public class User implements UserDetails, OAuth2User {
     private String displayName;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Artist> artists;
 
     // TODO better implementation
@@ -73,5 +75,10 @@ public class User implements UserDetails, OAuth2User {
     @Override
     public String getName() {
         return null;
+    }
+
+    @Override
+    public String toString(){
+        return super.toString();
     }
 }

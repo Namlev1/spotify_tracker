@@ -1,7 +1,9 @@
 package com.spotifytracker.service;
 
+import com.spotifytracker.model.Artist;
 import com.spotifytracker.model.Image;
 import com.spotifytracker.model.User;
+import com.spotifytracker.repository.ArtistRepository;
 import com.spotifytracker.repository.ImageRepository;
 import com.spotifytracker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +15,15 @@ import java.util.*;
 public class RepositoryService {
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
+    private final ArtistRepository artistRepository;
 
     @Autowired
-    public RepositoryService(UserRepository userRepository, ImageRepository imageRepository) {
+    public RepositoryService(UserRepository userRepository,
+                             ImageRepository imageRepository,
+                             ArtistRepository artistRepository) {
         this.userRepository = userRepository;
         this.imageRepository = imageRepository;
+        this.artistRepository = artistRepository;
     }
 
     public User registerUser(Map<String, Object> attributes) {
@@ -56,6 +62,10 @@ public class RepositoryService {
 
     public Image saveImage(Image image) {
         return imageRepository.save(image);
+    }
+
+    public List<Artist> findArtistsByUserId(String id) {
+        return artistRepository.findByUsersId(id).orElse(null);
     }
 
 }
