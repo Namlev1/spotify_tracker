@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
@@ -15,7 +15,7 @@ import java.util.Map;
 @Entity(name = "_user")
 @Data
 @NoArgsConstructor
-public class User implements UserDetails, OAuth2User {
+public class User implements OAuth2User {
 
     @Id
     private String id;
@@ -26,7 +26,6 @@ public class User implements UserDetails, OAuth2User {
     @JsonManagedReference
     private List<Artist> artists;
 
-    // TODO better implementation
     @Override
     public <A> A getAttribute(String name) {
         return OAuth2User.super.getAttribute(name);
@@ -34,51 +33,16 @@ public class User implements UserDetails, OAuth2User {
 
     @Override
     public Map<String, Object> getAttributes() {
-        return null;
+        return Map.of("displayName", displayName, "images", images, "artists", artists);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    public String getPassword() {
-        return null;
-    }
-
-    @Override
-    public String getUsername() {
-        return displayName;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
     public String getName() {
-        return null;
-    }
-
-    @Override
-    public String toString(){
-        return super.toString();
+        return displayName;
     }
 }
