@@ -18,6 +18,8 @@ public class Artist {
     private int followers;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List <Album> recentAlbums;
     @ManyToMany(mappedBy = "artists")
     @JsonBackReference
     List<User> users;

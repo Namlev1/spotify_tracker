@@ -1,5 +1,6 @@
 package com.spotifytracker.controller;
 
+import com.spotifytracker.model.Album;
 import com.spotifytracker.model.Artist;
 import com.spotifytracker.model.User;
 import com.spotifytracker.service.ApiService;
@@ -30,7 +31,7 @@ public class ReleasesController {
     }
 
     @GetMapping("/albums")
-    List<Artist> getAlbums(Authentication authentication) {
+    List<Album> getAlbums(Authentication authentication) throws IOException {
         User user = (User) authentication.getPrincipal();
         String userId = user.getId();
         return apiService.getAlbums(userId);

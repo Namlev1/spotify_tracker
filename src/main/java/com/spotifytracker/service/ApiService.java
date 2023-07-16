@@ -1,6 +1,7 @@
 package com.spotifytracker.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.spotifytracker.model.Album;
 import com.spotifytracker.model.Artist;
 import com.spotifytracker.model.User;
 import com.spotifytracker.util.JsonUtil;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -42,8 +44,30 @@ public class ApiService {
         return artists;
     }
 
-    public List<Artist> getAlbums(String id) {
-        //TODO return actual albums
-        return repositoryService.findArtistsByUserId(id);
+    public List<Album> getAlbums(String id) throws IOException {
+        List<Artist> artists = repositoryService.findArtistsByUserId(id);
+        List<Album> albums = new ArrayList<>();
+
+        for (Artist artist : artists) {
+            List<Album> albumsOfOneArtist = new ArrayList<>();
+            String uri = "https://api.spotify.com/v1/artists/" + artist.getId() + "/albums";
+
+            //traverse over all albums api responses
+            do {
+                ResponseEntity<JsonNode> responseEntity = restTemplate.exchange(
+                        uri,
+                        HttpMethod.GET,
+                        null,
+                        JsonNode.class
+                );
+                uri = responseEntity.getBody().get("next").asText();
+                albumsOfOneArtist.addAll(JsonUtil.extractAlbums(responseEntity));
+            } while (!uri.equals("null"));
+
+            artist.setRecentAlbums(albumsOfOneArtist);
+            repositoryService.saveArtist(artist);
+            albums.addAll(albumsOfOneArtist);
+        }
+        return albums;
     }
 }

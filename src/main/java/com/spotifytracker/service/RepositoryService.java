@@ -68,4 +68,8 @@ public class RepositoryService {
         return artistRepository.findByUsersId(id).orElse(null);
     }
 
+    public Artist saveArtist(Artist artist){
+        return artistRepository.save(artist);
+    }
+
 }
