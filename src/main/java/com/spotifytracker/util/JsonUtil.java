@@ -20,11 +20,6 @@ public class JsonUtil {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static List<Artist> extractArtists(ResponseEntity<JsonNode> response) throws IOException {
-        /* TODO handle:
-         *  1. 0 followers
-         *  2. 1 follower
-         *  3. 20+ followers
-         */
         JsonNode node = response.getBody().get("artists").get("items");
 
         List<Artist> artists = new ArrayList<>();
@@ -42,7 +37,6 @@ public class JsonUtil {
     }
 
     public static List<Album> extractAlbums(ResponseEntity<JsonNode> response) throws IOException {
-        // TODO work with "next" parameters
 
         List<Album> albums = new ArrayList<>();
         JsonNode node = response.getBody().get("items");

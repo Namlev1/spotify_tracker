@@ -30,14 +30,23 @@ public class ApiService {
 
     public List<Artist> getFollowedArtists(User user) throws IOException {
         String uri = "https://api.spotify.com/v1/me/following?type=artist";
-        ResponseEntity<JsonNode> responseEntity = restTemplate.exchange(
-                uri,
-                HttpMethod.GET,
-                null,
-                JsonNode.class
-        );
+        List<Artist> artists = new ArrayList<>();
 
-        List<Artist> artists = JsonUtil.extractArtists(responseEntity);
+        // traverse over all artists from response
+        do {
+            ResponseEntity<JsonNode> responseEntity = restTemplate.exchange(
+                    uri,
+                    HttpMethod.GET,
+                    null,
+                    JsonNode.class
+            );
+
+            if(responseEntity.getStatusCode().isError())
+                throw new RuntimeException();
+
+            uri = responseEntity.getBody().get("artists").get("next").asText();
+            artists.addAll(JsonUtil.extractArtists(responseEntity));
+        } while (!uri.equals("null"));
 
         user.setArtists(artists);
         repositoryService.saveUser(user);
@@ -60,6 +69,10 @@ public class ApiService {
                         null,
                         JsonNode.class
                 );
+
+                if(responseEntity.getStatusCode().isError())
+                    throw new RuntimeException();
+
                 uri = responseEntity.getBody().get("next").asText();
                 albumsOfOneArtist.addAll(JsonUtil.extractAlbums(responseEntity));
             } while (!uri.equals("null"));
