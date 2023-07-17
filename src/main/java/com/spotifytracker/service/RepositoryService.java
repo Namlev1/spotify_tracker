@@ -18,9 +18,7 @@ public class RepositoryService {
     private final ArtistRepository artistRepository;
 
     @Autowired
-    public RepositoryService(UserRepository userRepository,
-                             ImageRepository imageRepository,
-                             ArtistRepository artistRepository) {
+    public RepositoryService(UserRepository userRepository, ImageRepository imageRepository, ArtistRepository artistRepository) {
         this.userRepository = userRepository;
         this.imageRepository = imageRepository;
         this.artistRepository = artistRepository;
@@ -54,6 +52,10 @@ public class RepositoryService {
 
     public User saveUser(User user) {
         return userRepository.save(user);
+    }
+
+    public List<User> findAllUsers(){
+        return userRepository.findAll();
     }
 
     public Optional<User> findUserById(String id) {

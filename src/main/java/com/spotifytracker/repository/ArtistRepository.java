@@ -8,5 +8,4 @@ import java.util.Optional;
 
 public interface ArtistRepository extends JpaRepository<Artist, String> {
     Optional<List<Artist>> findByUsersId(String userId);
-
 }

@@ -5,6 +5,13 @@
     <title>Recent releases</title>
 </head>
 <body>
-Recent releases
+<body>
+<h1>List of Albums</h1>
+<ul>
+    <li th:each="album : ${albums}">
+        <span th:text="${album.name}"></span>
+    </li>
+</ul>
+</body>
 </body>
 </html>

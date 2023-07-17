@@ -28,7 +28,19 @@ public class ApiService {
     }
 
 
-    public List<Artist> getFollowedArtists(User user) throws IOException {
+    public void refreshArtistsAndAlbums(){
+        List<User> users = repositoryService.findAllUsers();
+        for(User user : users){
+            try {
+                requestFollowedArtists(user);
+                requestAlbums(user.getId());
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void requestFollowedArtists(User user) throws IOException {
         String uri = "https://api.spotify.com/v1/me/following?type=artist";
         List<Artist> artists = new ArrayList<>();
 
@@ -50,12 +62,10 @@ public class ApiService {
 
         user.setArtists(artists);
         repositoryService.saveUser(user);
-        return artists;
     }
 
-    public List<Album> getAlbums(String id) throws IOException {
+    public void requestAlbums(String id) throws IOException {
         List<Artist> artists = repositoryService.findArtistsByUserId(id);
-        List<Album> albums = new ArrayList<>();
 
         for (Artist artist : artists) {
             List<Album> albumsOfOneArtist = new ArrayList<>();
@@ -79,8 +89,6 @@ public class ApiService {
 
             artist.setRecentAlbums(albumsOfOneArtist);
             repositoryService.saveArtist(artist);
-            albums.addAll(albumsOfOneArtist);
         }
-        return albums;
     }
 }
