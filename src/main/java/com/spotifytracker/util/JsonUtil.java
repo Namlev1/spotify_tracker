@@ -59,6 +59,11 @@ public class JsonUtil {
             if (type.equals("compilation"))
                 continue;
 
+            String group = albumNode.get("album_group").asText();
+            // if album only appears on other playlist, skip
+            if (group.equals("appears_on"))
+                continue;
+
             String id = albumNode.get("id").asText();
             String name = albumNode.get("name").asText();
             String uri = albumNode.get("external_urls").get("spotify").asText();
