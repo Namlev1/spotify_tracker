@@ -27,20 +27,7 @@ public class ApiService {
         this.repositoryService = repositoryService;
     }
 
-
-    public void refreshArtistsAndAlbums(){
-        List<User> users = repositoryService.findAllUsers();
-        for(User user : users){
-            try {
-                requestFollowedArtists(user);
-                requestAlbums(user.getId());
-            } catch (IOException e){
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void requestFollowedArtists(User user) throws IOException {
+    public List<Artist> requestFollowedArtists(User user) throws IOException {
         String uri = "https://api.spotify.com/v1/me/following?type=artist";
         List<Artist> artists = new ArrayList<>();
 
@@ -62,13 +49,12 @@ public class ApiService {
 
         user.setArtists(artists);
         repositoryService.saveUser(user);
+        return artists;
     }
 
-    public void requestAlbums(String id) throws IOException {
-        List<Artist> artists = repositoryService.findArtistsByUserId(id);
+    public List<Album> requestAlbums(Artist artist) throws IOException {
 
-        for (Artist artist : artists) {
-            List<Album> albumsOfOneArtist = new ArrayList<>();
+            List<Album> albums = new ArrayList<>();
             String uri = "https://api.spotify.com/v1/artists/" + artist.getId() + "/albums";
 
             //traverse over all albums api responses
@@ -84,11 +70,11 @@ public class ApiService {
                     throw new RuntimeException();
 
                 uri = responseEntity.getBody().get("next").asText();
-                albumsOfOneArtist.addAll(JsonUtil.extractAlbums(responseEntity));
+                albums.addAll(JsonUtil.extractAlbums(responseEntity));
             } while (!uri.equals("null"));
 
-            artist.setRecentAlbums(albumsOfOneArtist);
+            artist.setRecentAlbums(albums);
             repositoryService.saveArtist(artist);
-        }
+            return albums;
     }
 }
