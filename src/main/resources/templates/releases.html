@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:width="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Recent releases</title>
@@ -12,6 +12,9 @@
 </head>
 <body>
 <body>
+<form method="POST" th:action="@{/logout}">
+    <input type="submit" value="Logout"/>
+</form>
 <h1>List of Albums</h1>
 <ul>
     <li th:each="artist : ${artists}">

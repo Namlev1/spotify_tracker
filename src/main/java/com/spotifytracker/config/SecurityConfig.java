@@ -33,15 +33,18 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/", "/home").permitAll();
+                    auth.requestMatchers("/", "/login").permitAll();
                     auth.requestMatchers(toH2Console()).permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .oauth2Login(oauth2 -> {
                     oauth2
+                            .loginPage("/login")
+                            .defaultSuccessUrl("/releases")
                             .userInfoEndpoint()
                             .userService(customOAuth2UserService());
                 })
+                .logout(logout -> logout.logoutSuccessUrl("/login"))
                 .csrf(csrf -> csrf.ignoringRequestMatchers(toH2Console()))
                 .headers(head -> head.frameOptions().disable())
                 .build();

@@ -1,8 +1,5 @@
 package com.spotifytracker.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,12 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HomeController {
 
     @GetMapping
-    public String base(){
-        return "home";
+    public String home() {
+        return "redirect:/login";
     }
 
-    @GetMapping("/home")
-    public String home(){
-        return "home";
+    @GetMapping("/login")
+    public String login() {
+        return "login";
     }
 }
