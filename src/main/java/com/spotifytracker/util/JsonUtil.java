@@ -42,7 +42,7 @@ public class JsonUtil {
         JsonNode node = response.getBody().get("items");
         for (JsonNode albumNode : node) {
             // if release date is not precise, skip
-            if (!albumNode.get("release_date_precision").asText().equals("day"))
+             if (!albumNode.get("release_date_precision").asText().equals("day"))
                 continue;
 
             LocalDate date = LocalDate.parse(albumNode.get("release_date").asText());
@@ -65,7 +65,7 @@ public class JsonUtil {
             List<Image> images = objectMapper.readValue(albumNode.get("images").traverse(), new TypeReference<>() {
             });
 
-            Album album = new Album(id, name, date, uri, type, images);
+            Album album = new Album(id, name, date, type, uri, images);
             albums.add(album);
         }
         return albums;
