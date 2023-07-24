@@ -39,10 +39,7 @@ public class ReleasesController {
         User user = (User) authentication.getPrincipal();
         List<Artist> artists = repositoryService.findArtistsByUserId(user.getId());
         List<Album> albums = new ArrayList<>();
-        for (Artist artist : artists) {
-            albums.addAll(artist.getRecentAlbums());
-        }
-        model.addAttribute("albums", albums);
+        model.addAttribute("artists", artists);
         return "releases";
     }
 }
