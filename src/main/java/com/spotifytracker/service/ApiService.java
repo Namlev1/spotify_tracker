@@ -8,6 +8,8 @@ import com.spotifytracker.util.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -27,6 +29,16 @@ public class ApiService {
         this.repositoryService = repositoryService;
     }
 
+    @Scheduled(cron = "* * 0 * * *")
+    public void refreshSpotifyData() throws IOException {
+        List<User> users = repositoryService.findAllUsers();
+        for(User user : users){
+            List<Artist> artists = requestFollowedArtists(user);
+            for (Artist artist : artists){
+                requestAlbums(artist);
+            }
+        }
+    }
     public List<Artist> requestFollowedArtists(User user) throws IOException {
         String uri = "https://api.spotify.com/v1/me/following?type=artist";
         List<Artist> artists = new ArrayList<>();

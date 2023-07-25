@@ -24,7 +24,6 @@ import java.util.concurrent.Executor;
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
-@EnableAsync
 @EnableWebSecurity
 public class SecurityConfig {
 
