@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -56,7 +55,8 @@ public class ApiService {
                 throw new RuntimeException();
 
             uri = responseEntity.getBody().get("artists").get("next").asText();
-            artists.addAll(JsonUtil.extractArtists(responseEntity));
+            JsonNode json = responseEntity.getBody();
+            artists.addAll(JsonUtil.extractArtists(json));
         } while (!uri.equals("null"));
 
         user.setArtists(artists);
@@ -82,7 +82,8 @@ public class ApiService {
                     throw new RuntimeException();
 
                 uri = responseEntity.getBody().get("next").asText();
-                albums.addAll(JsonUtil.extractAlbums(responseEntity));
+                JsonNode json = responseEntity.getBody();
+                albums.addAll(JsonUtil.extractRecentAlbums(json));
             } while (!uri.equals("null"));
 
             artist.setRecentAlbums(albums);

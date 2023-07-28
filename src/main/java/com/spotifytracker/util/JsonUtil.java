@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spotifytracker.model.Album;
 import com.spotifytracker.model.Artist;
 import com.spotifytracker.model.Image;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -19,9 +18,8 @@ import java.util.List;
 public class JsonUtil {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    public static List<Artist> extractArtists(ResponseEntity<JsonNode> response) throws IOException {
-        JsonNode node = response.getBody().get("artists").get("items");
-
+    public static List<Artist> extractArtists(JsonNode jsonBody) throws IOException {
+        JsonNode node = jsonBody.get("artists").get("items");
         List<Artist> artists = new ArrayList<>();
         for (JsonNode artistNode : node) {
             String id = artistNode.get("id").asText();
@@ -36,10 +34,9 @@ public class JsonUtil {
         return artists;
     }
 
-    public static List<Album> extractAlbums(ResponseEntity<JsonNode> response) throws IOException {
-
+    public static List<Album> extractRecentAlbums(JsonNode jsonBody) throws IOException {
         List<Album> albums = new ArrayList<>();
-        JsonNode node = response.getBody().get("items");
+        JsonNode node = jsonBody.get("items");
         for (JsonNode albumNode : node) {
             // if release date is not precise, skip
              if (!albumNode.get("release_date_precision").asText().equals("day"))
