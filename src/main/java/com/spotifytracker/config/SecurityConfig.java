@@ -69,11 +69,4 @@ public class SecurityConfig {
         };
     }
 
-    @Bean(name = "taskExecutor")
-    public Executor getAsyncExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setThreadNamePrefix("Async-");
-        executor.initialize();
-        return new DelegatingSecurityContextAsyncTaskExecutor(executor);
-    }
 }
