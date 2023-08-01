@@ -32,7 +32,7 @@ Head to https://developer.spotify.com/, log in with your Spotify account and cre
 </p>
 
 #### Install and run
-<u>Using maven:</u>
+<ins>Using maven:</ins>
 
 ```bash
     mvn spring-boot:run
@@ -40,7 +40,7 @@ Head to https://developer.spotify.com/, log in with your Spotify account and cre
 
 This will download all the dependencies and after that run the application.
 
-<u>Using IntelliJ Idea:</u>
+<ins>Using IntelliJ Idea:</ins>
 
 Open the project with IntelliJ Idea, wait until all the dependencies are downloaded and press *run*:
 
